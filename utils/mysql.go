@@ -8,8 +8,11 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+)
 
-	"github.com/fanchann/model/app/domain/types"
+var (
+	MYSQL_CONFIG    = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+	POSTGRES_CONFIG = "host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=Asia/Shanghai"
 )
 
 type DB struct {
@@ -28,10 +31,10 @@ func (d *DB) DatabaseConnection() *gorm.DB {
 
 	switch d.Driver {
 	case "postgres":
-		dbConnection = fmt.Sprintf(types.POSTGRES_CONFIG, d.Host, d.Username, d.Password, d.DBName, d.Port, d.SSlmode)
+		dbConnection = fmt.Sprintf(POSTGRES_CONFIG, d.Host, d.Username, d.Password, d.DBName, d.Port, d.SSlmode)
 		dialect = postgres.Open(dbConnection)
 	case "mysql":
-		dbConnection = fmt.Sprintf(types.MYSQL_CONFIG, d.Username, d.Password, d.Host, d.Port, d.DBName)
+		dbConnection = fmt.Sprintf(MYSQL_CONFIG, d.Username, d.Password, d.Host, d.Port, d.DBName)
 		dialect = mysql.Open(dbConnection)
 	}
 
